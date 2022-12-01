@@ -39,7 +39,7 @@ void DisplayLogic::processTheMove()
         }
         else
         {
-            changeFirstName("Rome");
+            changeFirstName("Beowulf");
 
             QString tmpText = doc.toJson(QJsonDocument::Compact).toStdString().c_str();
             SetJsonStringRaw(tmpText);
