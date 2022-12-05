@@ -3,6 +3,8 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QFile>
+#include "ProviderAPI.h"
+
 
 DisplayLogic::DisplayLogic(QObject *parent) : QObject(parent)
 {
@@ -16,7 +18,8 @@ DisplayLogic::DisplayLogic(QObject *parent) : QObject(parent)
     SetJsonStringRaw(tmpText);
 
     m_timer = new QTimer(this);
-    setButtonText("Start BattleShip Sim");
+    const char* tmp = Provider::hello();
+    qDebug()<< QString::fromUtf8(tmp);
 }
 
 void DisplayLogic::startGame()

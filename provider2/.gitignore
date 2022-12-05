@@ -1,0 +1,6 @@
+.git
+.vs
+CMakeLists.txt.user
+Debug
+Release
+*.vcxproj.user
