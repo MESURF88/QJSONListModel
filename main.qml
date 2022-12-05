@@ -5,8 +5,8 @@ import QtQuick.Layouts 1.12
 
 Window {
     id: root
-    width: 840
-    height: 480
+    width: 400
+    height: 280
     visible: true
     title: qsTr("JSONViews")
 
@@ -25,7 +25,7 @@ Window {
             id: btn1
             height: 30
             width: 100
-            text: "show json"
+            text: "toggle sample json"
             MouseArea{
                 anchors.fill: parent
                 onPressed: {
@@ -43,15 +43,22 @@ Window {
             id: btn2
             height: 30
             width: 100
-            text: "start timer"
+            text: "get JSON"
             MouseArea{
                 anchors.fill: parent
                 onPressed: {
-                    dspl.startGame();
+                    buttonInterrupt = 0;
+                    dspl.getEntity(cbox.currentText);
                 }
 
             }
 
+        }
+
+        ComboBox
+        {
+            id: cbox
+            model: ["entitya", "entityb"]
         }
 
         ListView {

@@ -11,7 +11,7 @@ extern "C" {
         Provider(const Provider& other);
         Provider &operator=(Provider rhs);
 
-        DLIB_EXPORT static const char* hello();
+        DLIB_EXPORT static const char* GET(const char*);
     private:
 
         class ProviderImpl;

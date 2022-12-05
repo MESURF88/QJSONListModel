@@ -14,7 +14,8 @@ class DisplayLogic : public QObject
     Q_PROPERTY(QString buttonText READ buttonText WRITE setButtonText NOTIFY buttonTextChanged)
 public:
     explicit DisplayLogic(QObject *parent = nullptr);
-    Q_INVOKABLE void startGame();
+
+    Q_INVOKABLE void getEntity(const QString& index);
     QString someVar();
     Q_INVOKABLE QString getSomeVar();
     Q_INVOKABLE void setSomeVar(const QString &someVar);
@@ -30,7 +31,7 @@ signals:
     void jsonStringRawChanged();
 
 public slots:
-    void processTheMove();
+
 protected:
 
 private:

@@ -1,2 +1,6 @@
 .git
+.vs
+out
+build
 CMakeLists.txt.user
+url.txt

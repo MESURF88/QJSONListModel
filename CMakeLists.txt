@@ -87,7 +87,11 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(JSONViews)
 endif()
 
-add_custom_command(TARGET JSONViews POST_BUILD        # Adds a post-build event to MyTest
+add_custom_command(TARGET JSONViews POST_BUILD        # Adds a post-build event
     COMMAND ${CMAKE_COMMAND} -E copy_if_different  # which executes "cmake - E copy_if_different..."
         "${CMAKE_CURRENT_SOURCE_DIR}/provider2/Release/provider2.dll"      # <--this is in-file
         $<TARGET_FILE_DIR:JSONViews>)               # <--this is out-file path
+add_custom_command(TARGET JSONViews POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/url.txt"
+        $<TARGET_FILE_DIR:JSONViews>)

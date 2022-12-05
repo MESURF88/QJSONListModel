@@ -6,6 +6,12 @@
 #include "ProviderAPI.h"
 
 
+
+static QHash<QString, int> entitymap {
+        {"entitya", 1},
+        {"entityb", 2}
+};
+
 DisplayLogic::DisplayLogic(QObject *parent) : QObject(parent)
 {
     QFile file("../JSONViews/tmp.txt");
@@ -18,36 +24,19 @@ DisplayLogic::DisplayLogic(QObject *parent) : QObject(parent)
     SetJsonStringRaw(tmpText);
 
     m_timer = new QTimer(this);
-    const char* tmp = Provider::hello();
-    qDebug()<< QString::fromUtf8(tmp);
 }
 
-void DisplayLogic::startGame()
+void DisplayLogic::getEntity(const QString& index)
 {
-    qDebug("started");
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(processTheMove()));
-    m_timer->start(500);
-}
+    if ((index != "") && (entitymap.contains(index)))
+    {
+        SetJsonStringRaw(QString::fromUtf8(Provider::GET(index.toUtf8())));
+    }
+    else
+    {
+        qDebug() << "Uknown GET";
+    }
 
-void DisplayLogic::processTheMove()
-{
-    static int p1_turn = 1;
-        if (p1_turn)
-        {
-            changeFirstName("Wuthering Heights");
-
-            QString tmpText = doc.toJson(QJsonDocument::Compact).toStdString().c_str();
-            SetJsonStringRaw(tmpText);
-            p1_turn = 0;
-        }
-        else
-        {
-            changeFirstName("Beowulf");
-
-            QString tmpText = doc.toJson(QJsonDocument::Compact).toStdString().c_str();
-            SetJsonStringRaw(tmpText);
-            p1_turn = 1;
-        }
 }
 
 void DisplayLogic::changeFirstName(QString name)
@@ -73,7 +62,6 @@ QString DisplayLogic::getSomeVar()
 {
     return m_someVar;
 }
-
 
 void DisplayLogic::setSomeVar(const QString &someVar)
 {
@@ -108,6 +96,9 @@ const QString &DisplayLogic::jsonStringRaw() const
 
 void DisplayLogic::SetJsonStringRaw(const QString &newJsonStringRaw)
 {
+#ifdef QT_DEBUG
+      qDebug() << newJsonStringRaw << "/n";
+#endif
     if (m_jsonStringRaw == newJsonStringRaw)
         return;
     m_jsonStringRaw = newJsonStringRaw;
