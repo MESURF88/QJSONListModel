@@ -5,6 +5,7 @@
 #include <QString>
 #include <QTimer>
 #include <QJsonDocument>
+#include "ProviderAPI.h"
 
 class DisplayLogic : public QObject
 {
@@ -40,7 +41,7 @@ private:
 
     QString m_someVar;
     QString m_buttonText;
-    QTimer *m_timer = nullptr;
     QString m_jsonStringRaw;
+    std::shared_ptr<Provider> mClient;
 };
 #endif

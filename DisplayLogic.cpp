@@ -3,8 +3,8 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QFile>
-#include "ProviderAPI.h"
 
+#include <chrono>
 
 
 static QHash<QString, int> entitymap {
@@ -12,7 +12,7 @@ static QHash<QString, int> entitymap {
         {"entityb", 2}
 };
 
-DisplayLogic::DisplayLogic(QObject *parent) : QObject(parent)
+DisplayLogic::DisplayLogic(QObject *parent) : QObject(parent), mClient()
 {
     QFile file("../JSONViews/tmp.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
@@ -22,15 +22,20 @@ DisplayLogic::DisplayLogic(QObject *parent) : QObject(parent)
     doc = QJsonDocument::fromJson(data.toUtf8());
     QString tmpText = doc.toJson(QJsonDocument::Compact).toStdString().c_str();
     SetJsonStringRaw(tmpText);
-
-    m_timer = new QTimer(this);
 }
 
 void DisplayLogic::getEntity(const QString& index)
 {
     if ((index != "") && (entitymap.contains(index)))
     {
-        SetJsonStringRaw(QString::fromUtf8(Provider::GET(index.toUtf8())));
+        // Get starting timepoint
+        auto start = std::chrono::high_resolution_clock::now();
+        SetJsonStringRaw(QString::fromUtf8(mClient->stuff(index.toUtf8())));
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+
+            qDebug() << "Time taken by function: "
+                 << duration.count() << " microseconds";
     }
     else
     {

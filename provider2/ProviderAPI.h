@@ -3,7 +3,7 @@
 
 extern "C" {
 
-    class Provider
+    class DLIB_EXPORT Provider
     {
     public:
         explicit Provider(void);
@@ -11,7 +11,8 @@ extern "C" {
         Provider(const Provider& other);
         Provider &operator=(Provider rhs);
 
-        DLIB_EXPORT static const char* GET(const char*);
+        const char* GET(const char*);
+        const char* stuff(const char*);
     private:
 
         class ProviderImpl;

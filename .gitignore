@@ -3,4 +3,5 @@
 out
 build
 CMakeLists.txt.user
+CMakeLists_bkup.txt
 url.txt

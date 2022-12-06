@@ -44,10 +44,12 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/provider2)
 
 set(PROJECT_HEADERS
         DisplayLogic.hpp
+        GlobalClient.hpp
 )
 
 set(PROJECT_SOURCES
         DisplayLogic.cpp
+        GlobalClient.cpp
         main.cpp
         qml.qrc
 )

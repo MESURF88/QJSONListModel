@@ -22,7 +22,6 @@ public:
     const char* GET(std::string entityName);
 
 private:
-    std::stringstream lclGETCallLibcurl(std::string uri);
     std::string mSecretURL;
 };
 
@@ -40,8 +39,23 @@ const char* Provider::ProviderImpl::GET(std::string entityName)
     if ((entityName == "entitya") || (entityName == "entityb"))
     {
         std::string uri = mSecretURL + entityName;
-        std::stringstream response = lclGETCallLibcurl(uri);
-        return response.str().c_str();
+        std::stringstream str;
+        curl::curl_ios<std::stringstream> writer(str);
+
+        curl::curl_easy easy(writer);
+
+        easy.add<CURLOPT_URL>(uri.c_str());
+        easy.add<CURLOPT_FOLLOWLOCATION>(1L);
+        try
+        {
+            easy.perform();
+        }
+        catch (curl::curl_easy_exception error)
+        {
+            auto errors = error.get_traceback();
+            error.print_traceback();
+        }
+        return str.str().c_str();
     }
     else
     {
@@ -49,30 +63,7 @@ const char* Provider::ProviderImpl::GET(std::string entityName)
     }
 }
 
-std::stringstream Provider::ProviderImpl::lclGETCallLibcurl(std::string uri)
-{
-    std::stringstream str;
-    curl::curl_ios<std::stringstream> writer(str);
-
-    curl::curl_easy easy(writer);
-
-    easy.add<CURLOPT_URL>(uri.c_str());
-    easy.add<CURLOPT_FOLLOWLOCATION>(1L);
-    try
-    {
-        easy.perform();
-    }
-    catch (curl::curl_easy_exception error)
-    {
-        auto errors = error.get_traceback();
-        error.print_traceback();
-    }
-
-    return str;
-}
-
 // this has to be below
-static Provider instance;
 Provider::Provider() : impl_(new ProviderImpl) {
 
 }
@@ -89,5 +80,10 @@ Provider& Provider::operator=(Provider rhs)
 
 const char* Provider::GET(const char* entityName)
 {
-    return instance.impl_->GET(std::string(entityName));
+    return impl_->GET(std::string(entityName));
+}
+
+const char* Provider::stuff(const char* entityName)
+{
+    return tmpJSON1;
 }
